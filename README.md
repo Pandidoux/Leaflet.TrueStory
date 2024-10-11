@@ -3,7 +3,7 @@
 Leaflet.TrueStory is a Leaflet plugin made to create storymap.
 
 ## Demo
-[View Demo](#)
+[View Demo](https://pandidoux.github.io/Leaflet.TrueStory/demo/)
 
 ## Getting Started
 
