@@ -1,27 +1,28 @@
-/* Leaflet control plugins inherit from Leaflet's Control class. A common
- * naming convention is to add the name of the control plugin to Leaflet's
- * namespace, which is L.
- */
+/* Leaflet control plugins inherit from Leaflet's Control class. */
 L.LeafletTrueStory = L.Control.extend({
     options: {
         id: null, // Storymap container HTML id
-        mode: 'center', // Story display mode: center|left|right
-        background: 'transparent', // Background css property of the stories
-        interactThrough: false, // Allow to interact with the map behind the storymap
+        mode: 'full', // Story display mode: "full"|"left"|"right"
+        background: 'transparent', // Background css property of the stories container
+        interactThrough: false, // Allow interactions with the map through the storymap background
         toggle: false, // Show a control toggle button
         toggleLabel: 'Toggle storymap', // Label of the storymap toggle button
-        position: 'topleft', // Toggle control button position
-        collapsed: false, // If toggle button is true, story should storymap be collapsed on init
-        spacer: '20em', // Bottom padding space between each stories
+        position: 'topleft', // Control button position
+        collapsed: false, // Should storymap be collapsed on init (when toggle: true)
+        spacer: '200px', // Bottom padding space between each stories
         autoshift: true, // Automaticaly shift the map to the side when mode is right or left
-        stories: [],
+        borderRadius: '20px', // Border radius of stories blocs
+        blured: false, // Blur the limits between the map and the storymap background
+        stories: [], // Array of stories properties described in the dedicated section
     },
     defaultStoryOptions: {
-        id: null, // Story HTML id
+        id: null, // Define a HTML id for the story bloc
         title: null, // Story title (text or HTML element)
         content: null, // Story content (text or HTML element)
-        width: '100%', // Story width
-        align: 'center', // Align story to the left, right, center
+        width: '100%', // Story css width property
+        align: 'center', // Align story to the "center"|"left"|"right"
+        background: '#FFF', // Story bloc background css property
+        shadow: true, // Show a shadow on the story bloc
         callback: null, // Function called when the story is visible
     },
 
@@ -31,26 +32,13 @@ L.LeafletTrueStory = L.Control.extend({
      */
     initialize: function (options) {
         // Combine the control plugin's default options with those passed in as the parameter
-        // console.log('this =', this);
-        // console.log('options =', options);
         L.Util.setOptions(this, options);
     },
 
 
-    /* Leaflet calls the onAdd function when the control is added to the map:
-     * control.addTo(map);
-     * map.addControl(control);
-     */
+    /* Called by Leaflet when the control is added to the map */
     onAdd: function (map) {
-        /* Create the DOM element that will contain the control. The leaflet-control-template
-         * CSS class is defined in the LeafletSimpleSlider.css file.
-         */
-        this._initLayout();
-        // Continue implementing the control here.
-
-        /* The onAdd function must return the DOM element that contains the plugin
-         * control. Leaflet will add this element to the map.
-         */
+        this._initLayout(); // Create the DOM element that will contain the control.
         return this._container;
     },
 
@@ -59,12 +47,12 @@ L.LeafletTrueStory = L.Control.extend({
     _initLayout: function () {
 
         // Toggle open button
-        this._container = L.DomUtil.create('div', 'leaflet-truestory-openner leaflet-bar ');
-        this._toggle = L.DomUtil.create('a', 'toggle toggleimg');
-        this._toggle.setAttribute('title',this.options.toggleLabel);
+        this._container = L.DomUtil.create('div', 'leaflet-bar leaflet-truestory-openner');
+        this._oppener = document.createElement('a');
+        this._oppener.setAttribute('title', this.options.toggleLabel);
         L.DomEvent.disableClickPropagation(this._container);
         L.DomEvent.disableScrollPropagation(this._container);
-        this._container.appendChild(this._toggle);
+        this._container.appendChild(this._oppener);
         if (this.options.toggle !== true) {
             this._container.style.display = 'none';
         }
@@ -74,7 +62,7 @@ L.LeafletTrueStory = L.Control.extend({
         this._storyContainer.style.display = 'none';
         this._map._container.appendChild(this._storyContainer);
         if (this.options.id) {
-            this._storyContainer.setAttribute('id',this.options.id);
+            this._storyContainer.setAttribute('id', this.options.id);
         }
         this._storyContainer.classList.add('leaflet-truestory');
         switch (this.options.mode) {
@@ -89,10 +77,12 @@ L.LeafletTrueStory = L.Control.extend({
                 break;
         }
         this._storyContainer.style.background = this.options.background;
+        // Disable map interaction through all storymap surface
         if (this.options.interactThrough !== true) {
             L.DomEvent.disableClickPropagation(this._storyContainer);
             L.DomEvent.disableScrollPropagation(this._storyContainer);
         }
+        this._storyContainer.style.boxShadow = (this.options.blured === true) ? `0 0 5px 5px ${this.options.background}` : null;
 
         // Stories
         if (Object.prototype.toString.call(this.options.stories) === '[object Array]') {
@@ -114,46 +104,54 @@ L.LeafletTrueStory = L.Control.extend({
      * @param {Object} story_options A story options
     */
     _createStory: function (story_options) {
-        story = {...this.defaultStoryOptions, ...story_options};
+        story = { ...this.defaultStoryOptions, ...story_options };
 
         // Container
         let storyContainer = document.createElement('div');
-        storyContainer.setAttribute('id',story.id);
+        storyContainer.setAttribute('id', story.id);
         switch (story.align) {
             case 'left':
-                storyContainer.classList.add('truestory-container-left');
+                storyContainer.classList.add('leaflet-truestory-containerleft');
                 break;
             case 'right':
-                storyContainer.classList.add('truestory-container-right');
+                storyContainer.classList.add('leaflet-truestory-containerright');
                 break;
             default:
-                storyContainer.classList.add('truestory-container-center');
+                storyContainer.classList.add('leaflet-truestory-containercenter');
                 break;
         }
-        let storyElement = document.createElement('div');
-        storyContainer.appendChild(storyElement);
-        storyElement.classList.add('leaflet-truestory-story');
-        storyElement.style.width = story.width;
+        let storyBloc = document.createElement('div');
+        storyContainer.appendChild(storyBloc);
+        storyBloc.classList.add('leaflet-truestory-storybloc');
+        storyBloc.style.width = story.width;
+        storyBloc.style.borderRadius = this.options.borderRadius;
+        storyBloc.style.background = story.background;
+        storyBloc.style.boxShadow = (story.shadow === true) ? '0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15)' : null;
+        // Disable map interaction only through the storyBloc
+        if (this.options.interactThrough === true) {
+            L.DomEvent.disableClickPropagation(storyBloc);
+            L.DomEvent.disableScrollPropagation(storyBloc);
+        }
 
         // Title
         if (story.title) {
             let titleContainer = document.createElement('div');
-            storyElement.appendChild(titleContainer);
-            titleContainer.classList.add('leaflet-truestory-title');
-            if (story.title instanceof HTMLElement) { // Element
+            storyBloc.appendChild(titleContainer);
+            if (story.title instanceof HTMLElement) { // title => Element
                 titleContainer.appendChild(story.title);
-            } else { // String
+            } else { // title => String
                 titleContainer.innerHTML = story.title;
+                titleContainer.classList.add('leaflet-truestory-title');
             }
         }
 
         // Content
         let contentContainer = document.createElement('div');
-        storyElement.appendChild(contentContainer);
+        storyBloc.appendChild(contentContainer);
         contentContainer.classList.add('leaflet-truestory-content');
-        if (story.content instanceof HTMLElement) { // Element
+        if (story.content instanceof HTMLElement) { // content => Element
             contentContainer.appendChild(story.content);
-        } else { // String
+        } else { // content => String
             contentContainer.innerHTML = story.content;
         }
 
@@ -164,7 +162,7 @@ L.LeafletTrueStory = L.Control.extend({
     /** Update the control content */
     _postInit: function () {
         // Toggle open button
-        this._toggle.addEventListener('click', ()=>{
+        this._oppener.addEventListener('click', () => {
             if (this._storyContainer.style.display == 'none') {
                 this._expand();
             } else {
@@ -200,7 +198,7 @@ L.LeafletTrueStory = L.Control.extend({
                 }
             }, 250);
         }, {
-            passive:true
+            passive: true
         });
         // init first story callback
         if (typeof this.options.stories[0].callback == 'function') {
@@ -211,19 +209,17 @@ L.LeafletTrueStory = L.Control.extend({
 
 
     /** Expand Storymap */
-    _expand: function() {
-        // console.log('_expand');
+    _expand: function () {
         this._storyContainer.style.display = null;
-        if (this.options.autoshift === true && (this.options.mode == 'left' || this.options.mode == 'right')) {
-            // let size = this._map.getSize().x;
+        if (this.options.autoshift === true && (this.options.mode === 'left' || this.options.mode === 'right')) {
             let size = window.innerWidth;
-            if (this.options.mode == 'left') {
+            if (this.options.mode === 'left') {
                 if (size > 640) {
                     this._shiftMap('right', 15);
                 } else {
                     this._shiftMap('top', 20);
                 }
-            } else if (this.options.mode == 'right') {
+            } else if (this.options.mode === 'right') {
                 if (size > 640) {
                     this._shiftMap('left', 15);
                 } else {
@@ -235,19 +231,17 @@ L.LeafletTrueStory = L.Control.extend({
 
 
     /** Collapse Storymap */
-    _collapse: function() {
-        // console.log('_collapse');
+    _collapse: function () {
         this._storyContainer.style.display = 'none';
-        if (this.options.autoshift === true && (this.options.mode == 'left' || this.options.mode == 'right')) {
-            // let size = this._map.getSize().x;
+        if (this.options.autoshift === true && (this.options.mode === 'left' || this.options.mode === 'right')) {
             let size = window.innerWidth;
-            if (this.options.mode == 'left') {
+            if (this.options.mode === 'left') {
                 if (size > 640) {
                     this._unshiftMap('right', 15);
                 } else {
                     this._unshiftMap('top', 20);
                 }
-            } else if (this.options.mode == 'right') {
+            } else if (this.options.mode === 'right') {
                 if (size > 640) {
                     this._unshiftMap('left', 15);
                 } else {
@@ -262,9 +256,8 @@ L.LeafletTrueStory = L.Control.extend({
      * @param {String} direction Which direction the map sould offset to
      * @param {Number} shiftPercent Percentage of the map to shift between 0 and 100, default: 15
      */
-    _shiftMap: function(direction, shiftPercent) {
-        // console.log('_shiftMap');
-        shiftPercent = (shiftPercent) ? (shiftPercent / 100) : 0.15 ;
+    _shiftMap: function (direction, shiftPercent) {
+        shiftPercent = (shiftPercent) ? (shiftPercent / 100) : 0.15;
         let multiplier_h = 0;
         let multiplier_v = 0;
         switch (direction) {
@@ -285,7 +278,7 @@ L.LeafletTrueStory = L.Control.extend({
         }
         let offset_h = (map.getSize().x * shiftPercent) * multiplier_h;
         let offset_v = (map.getSize().y * shiftPercent) * multiplier_v;
-        map.panBy(new L.Point(offset_h, offset_v), {animate:false}); // Shift map center
+        map.panBy(new L.Point(offset_h, offset_v), { animate: false }); // Shift map center
     },
 
 
@@ -293,9 +286,8 @@ L.LeafletTrueStory = L.Control.extend({
      * @param {String} direction From which direction the map has been offset
      * @param {Number} shiftPercent Percentage of the map to shift between 0 and 100, default: 15
      */
-    _unshiftMap: function(direction, shiftPercent) {
-        // console.log('_unshiftMap');
-        shiftPercent = (shiftPercent) ? (shiftPercent / 100) : 0.15 ;
+    _unshiftMap: function (direction, shiftPercent) {
+        shiftPercent = (shiftPercent) ? (shiftPercent / 100) : 0.15;
         let multiplier_h = 0;
         let multiplier_v = 0;
         switch (direction) {
@@ -316,28 +308,27 @@ L.LeafletTrueStory = L.Control.extend({
         }
         let offset_h = (map.getSize().x * shiftPercent) * multiplier_h;
         let offset_v = (map.getSize().y * shiftPercent) * multiplier_v;
-        map.panBy(new L.Point(offset_h, offset_v), {animate:false}); // Shift map center
+        map.panBy(new L.Point(offset_h, offset_v), { animate: false }); // Shift map center
     },
 
 
-    /** Detecte si l'élément est visible ou non
-     * @param {HTMLElement} element element à vérifier
-     * @param {HTMLElement} container contenneur de l'élément à vérifier
-     * @returns {Boolean} True => visible, False => invisible
+    /** Detect if element is visible or not
+     * @param {HTMLElement} element element to verify
+     * @param {HTMLElement} container element's container
+     * @returns {Boolean} True => visible, False => not visible
      */
-    _isStoryVisible: function(element, container) {
+    _isStoryVisible: function (element, container) {
         const element_bounds = element.getBoundingClientRect();
         const container_bounds = container.getBoundingClientRect();
-        // console.log('element_bounds =',element_bounds,' container_bounds =',container_bounds);
-        return ((element_bounds.top >= container_bounds.top) && (element_bounds.top < (container_bounds.height+container_bounds.top)));
+        return ((element_bounds.top >= container_bounds.top) && (element_bounds.top < (container_bounds.height + container_bounds.top)));
     },
 
 
-    /* Leaflet calls the onRemove function when a control is removed from the map:
-     * control.removeFrom(map);
-     * map.removeControl(control);
-     */
+    /* Leaflet calls the onRemove function when a control is removed from the map */
     onRemove: function (map) {
+        if (this._storyContainer.style.display != 'none') {
+            this._collapse();
+        }
         this._container.remove();
         this._storyContainer.remove();
     },
@@ -345,12 +336,8 @@ L.LeafletTrueStory = L.Control.extend({
 
 });
 
-/* The standard Leaflet plugin creation pattern is to implement a factory function that
- * enables the creation of the plugin to be chained with other function calls:
- * L.leafletTrueStory().addTo(map);
- * The common convention is to name the factory function after the class of the control
- * plugin but make the first letter lower case.
- */
+
+/* Factory function */
 L.leafletTrueStory = function (options) {
     return new L.LeafletTrueStory(options);
 };

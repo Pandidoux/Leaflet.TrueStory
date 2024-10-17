@@ -17,7 +17,66 @@
 </head>
 <body>
 
+    <div id="header">
+        <h1>Leaflet.TrueStory Demo</h1>
+
+        <div id="modifier-buttons">
+            <div class="buttons-group">
+                <button name="mode" onclick="updateTrueStory('mode','left'); this.classList.add('active')">mode: "left"</button>
+                <button name="mode" onclick="updateTrueStory('mode','full'); this.classList.add('active')">mode: "full"</button>
+                <button name="mode" onclick="updateTrueStory('mode','right'); this.classList.add('active')" class="active">mode: "right"</button>
+            </div>
+            <div class="buttons-group">
+                <button name="autoshift" onclick="updateTrueStory('autoshift',true); this.classList.add('active')" class="active">autoshift: true</button>
+                <button name="autoshift" onclick="updateTrueStory('autoshift',false); this.classList.add('active')">autoshift: false</button>
+            </div>
+            <div class="buttons-group">
+                <button name="background" onclick="updateTrueStory('background','rgba(0, 0, 0, 0.4)'); this.classList.add('active')" class="active">background: "rgba(0,0,0,0.4)"</button>
+                <button name="background" onclick="updateTrueStory('background','#FFFFFF'); this.classList.add('active')">background: "#FFFFFF"</button>
+                <button name="background" onclick="updateTrueStory('background','transparent'); this.classList.add('active')">background: "transparent"</button>
+            </div>
+            <div class="buttons-group">
+                <button name="blured" onclick="updateTrueStory('blured',true); this.classList.add('active')">blured: true</button>
+                <button name="blured" onclick="updateTrueStory('blured',false); this.classList.add('active')" class="active">blured: false</button>
+            </div>
+            <div class="buttons-group">
+                <button name="interactThrough" onclick="updateTrueStory('interactThrough',true); this.classList.add('active')">interactThrough: true</button>
+                <button name="interactThrough" onclick="updateTrueStory('interactThrough',false); this.classList.add('active')" class="active">interactThrough: false</button>
+            </div>
+            <div class="buttons-group">
+                <button name="spacer" onclick="updateTrueStory('spacer','10px'); this.classList.add('active')">spacer: 10px</button>
+                <button name="spacer" onclick="updateTrueStory('spacer','20em'); this.classList.add('active')" class="active">spacer: 20em</button>
+                <button name="spacer" onclick="updateTrueStory('spacer','50%'); this.classList.add('active')">spacer: 50%</button>
+            </div>
+            <div class="buttons-group">
+                <button name="position" onclick="updateTrueStory('position','topleft'); this.classList.add('active')" class="active">position: topleft</button>
+                <button name="position" onclick="updateTrueStory('position','topright'); this.classList.add('active')">position: topright</button>
+                <button name="position" onclick="updateTrueStory('position','bottomleft'); this.classList.add('active')">position: bottomleft</button>
+                <button name="position" onclick="updateTrueStory('position','bottomright'); this.classList.add('active')">position: bottomright</button>
+            </div>
+            <div class="buttons-group">
+                <button name="collapsed" onclick="updateTrueStory('collapsed',true); this.classList.add('active')">collapsed: true</button>
+                <button name="collapsed" onclick="updateTrueStory('collapsed',false); this.classList.add('active')" class="active">collapsed: false</button>
+            </div>
+            <div class="buttons-group">
+                <button name="toggle" onclick="updateTrueStory('toggle',true); this.classList.add('active')" class="active">toggle: true</button>
+                <button name="toggle" onclick="updateTrueStory('toggle',false); this.classList.add('active')">toggle: false</button>
+            </div>
+        </div>
+    </div>
+
+
+    <h2 id="extrenal-title" style="color: #FFF;">Title 5</h2>
+    <p id="extrenal-content" style="color: #FFF;">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.
+        Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi.
+        Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat.
+    </p>
+
+
     <div id="map"></div>
+
 
     <!-- Leaflet -->
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
@@ -27,6 +86,17 @@
 
     <!-- Map Script -->
     <script src="./map.js"></script>
+
+    <script>
+        // Ajust map height for the demo
+        let map_elem = document.querySelector('#map');
+        let header_elem = document.querySelector('#header');
+        const updMapSize = () => {
+            map_elem.style.height = `calc(100% - ${header_elem.clientHeight}px - 10px * 2)`;
+        }
+        window.addEventListener('resize',updMapSize);
+        updMapSize();
+    </script>
 
 </body>
 </html>
