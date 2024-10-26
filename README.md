@@ -39,8 +39,8 @@ let leafletTrueStory = L.leafletTrueStory({
         mode: 'full',
         background: 'rgba(0, 0, 0, 0.4)',
         interactThrough: false,
-        toggle: true,
-        toggleLabel: 'Toggle storymap',
+        control: true,
+        controlLabel: 'Toggle storymap',
         position: 'topleft',
         collapsed: false,
         spacer: '20em',
@@ -76,12 +76,13 @@ leafletTrueStory.addTo(map);
 |-----------------|-------------------------------------------------------------------|-------------------|---------|
 | id              | Storymap container HTML id                                        | null              | string  |
 | mode            | Story display mode: `"full"`\|`"left"`\|`"right"`                 | "full"            | string  |
+| padding         | CSS padding property between the stories and the edges of the map | "10px"            | string  |
 | background      | Background css property of the stories container                  | "transparent"     | string  |
 | interactThrough | Allow interactions with the map through the storymap background   | false             | boolean |
-| toggle          | Show a control toggle button                                      | false             | boolean |
-| toggleLabel     | Label of the storymap toggle button                               | "Toggle storymap" | string  |
+| control         | Show a control button                                             | false             | boolean |
+| controlLabel    | Label of the storymap control button                              | "Toggle storymap" | string  |
 | position        | Control button position                                           | "topleft"         | string  |
-| collapsed       | Should storymap be collapsed on init (when `toggle: true`)        | false             | boolean |
+| collapsed       | Should storymap be collapsed on init (when `control: true`)       | false             | boolean |
 | spacer          | Bottom padding space between each stories                         | "200px"           | string  |
 | autoshift       | Automaticaly shift the map to the side when mode is right or left | true              | boolean |
 | borderRadius    | Border radius of stories blocs                                    | "20px"            | string  |
@@ -99,3 +100,6 @@ leafletTrueStory.addTo(map);
 | background | Story bloc background css property                    | "#FFF"        | string                |
 | shadow     | Show a shadow on the story bloc                       | true          | boolean               |
 | callback   | Function called when the story is visible             | null          | function              |
+
+The callback function take the current story properties as parameter.  
+When two stories are entirely visible at the same time, the top one is prioritize.

@@ -6,10 +6,10 @@ L.LeafletTrueStory = L.Control.extend({
         padding: '10px', // CSS padding property between the stories and the edges of the map
         background: 'transparent', // Background css property of the stories container
         interactThrough: false, // Allow interactions with the map through the storymap background
-        toggle: false, // Show a control toggle button
-        toggleLabel: 'Toggle storymap', // Label of the storymap toggle button
+        control: false, // Show a control button
+        controlLabel: 'Toggle storymap', // Label of the storymap control button
         position: 'topleft', // Control button position
-        collapsed: false, // Should storymap be collapsed on init (when toggle: true)
+        collapsed: false, // Should storymap be collapsed on init (when control: true)
         spacer: '200px', // Bottom padding space between each stories
         autoshift: true, // Automaticaly shift the map to the side when mode is right or left
         borderRadius: '20px', // Border radius of stories blocs
@@ -50,11 +50,11 @@ L.LeafletTrueStory = L.Control.extend({
         // Toggle open button
         this._container = L.DomUtil.create('div', 'leaflet-bar leaflet-truestory-openner');
         this._oppener = document.createElement('a');
-        this._oppener.setAttribute('title', this.options.toggleLabel);
+        this._oppener.setAttribute('title', this.options.controlLabel);
         L.DomEvent.disableClickPropagation(this._container);
         L.DomEvent.disableScrollPropagation(this._container);
         this._container.appendChild(this._oppener);
-        if (this.options.toggle !== true) {
+        if (this.options.control !== true) {
             this._container.style.display = 'none';
         }
 
@@ -179,7 +179,7 @@ L.LeafletTrueStory = L.Control.extend({
 
         // Story callback on scroll
         var scroll_timeout = null;
-        this._last_story = this.options.stories[0]
+        this._last_story = this.options.stories[0];
         this._storyContainer.addEventListener('scroll', (e) => {
             clearTimeout(scroll_timeout);
             scroll_timeout = setTimeout(() => {
