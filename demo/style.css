@@ -15,7 +15,7 @@ h1 {
     width: 100%;
 }
 
-#modifier-buttons {
+#modifiers {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -25,14 +25,10 @@ h1 {
     overflow-x: auto;
 }
 
-#modifier-buttons .buttons-group {
+.radio-group {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin: 5px 0;
+    border: 1px solid black;
+    padding: 2px 4px;
+    margin: 1px 0;
 }
-
-#modifier-buttons button.active {
-    background-color: lightgreen;
-}
-

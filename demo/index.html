@@ -20,52 +20,63 @@
     <div id="header">
         <h1>Leaflet.TrueStory Demo</h1>
 
-        <div id="modifier-buttons">
-            <div class="buttons-group">
-                <button name="mode" onclick="updateTrueStory('mode','left'); this.classList.add('active')">mode: "left"</button>
-                <button name="mode" onclick="updateTrueStory('mode','full'); this.classList.add('active')">mode: "full"</button>
-                <button name="mode" onclick="updateTrueStory('mode','right'); this.classList.add('active')" class="active">mode: "right"</button>
+
+        <div id="modifiers">
+            <div class="radio-group">
+                <b>mode:</b>
+                <label><input type="radio" name="mode" checked="checked">full</label>
+                <label><input type="radio" name="mode">left</label>
+                <label><input type="radio" name="mode">right</label>
             </div>
-            <div class="buttons-group">
-                <button name="autoshift" onclick="updateTrueStory('autoshift',true); this.classList.add('active')" class="active">autoshift: true</button>
-                <button name="autoshift" onclick="updateTrueStory('autoshift',false); this.classList.add('active')">autoshift: false</button>
+            <div class="radio-group">
+                <b>position:</b>
+                <label><input type="radio" name="position" checked="checked">topleft</label>
+                <label><input type="radio" name="position">topright</label>
+                <label><input type="radio" name="position">bottomleft</label>
+                <label><input type="radio" name="position">bottomright</label>
             </div>
-            <div class="buttons-group">
-                <button name="padding" onclick="updateTrueStory('padding','0px'); this.classList.add('active')">padding: "0px"</label>
-                <button name="padding" onclick="updateTrueStory('padding','10px'); this.classList.add('active')">padding: "10px"</label>
-                <button name="padding" onclick="updateTrueStory('padding','20px 60px'); this.classList.add('active')" class="active">padding: "20px 60px"</label>
+            <div class="radio-group">
+                <b>padding:</b>
+                <label><input type="radio" name="padding">0px</label>
+                <label><input type="radio" name="padding">10px</label>
+                <label><input type="radio" name="padding" checked="checked">20px 60px</label>
             </div>
-            <div class="buttons-group">
-                <button name="background" onclick="updateTrueStory('background','rgba(0, 0, 0, 0.4)'); this.classList.add('active')" class="active">background: "rgba(0,0,0,0.4)"</button>
-                <button name="background" onclick="updateTrueStory('background','#FFFFFF'); this.classList.add('active')">background: "#FFFFFF"</button>
-                <button name="background" onclick="updateTrueStory('background','transparent'); this.classList.add('active')">background: "transparent"</button>
+            <div class="radio-group">
+                <b>background:</b>
+                <label><input type="radio" name="background" checked="checked">rgba(0, 0, 0, 0.4)</label>
+                <label><input type="radio" name="background">#FFFFFF</label>
+                <label><input type="radio" name="background">transparent</label>
             </div>
-            <div class="buttons-group">
-                <button name="blured" onclick="updateTrueStory('blured',true); this.classList.add('active')">blured: true</button>
-                <button name="blured" onclick="updateTrueStory('blured',false); this.classList.add('active')" class="active">blured: false</button>
+            <div class="radio-group">
+                <b>spacer:</b>
+                <label><input type="radio" name="spacer">10px</label>
+                <label><input type="radio" name="spacer" checked="checked">20em</label>
+                <label><input type="radio" name="spacer">50%</label>
             </div>
-            <div class="buttons-group">
-                <button name="interactThrough" onclick="updateTrueStory('interactThrough',true); this.classList.add('active')">interactThrough: true</button>
-                <button name="interactThrough" onclick="updateTrueStory('interactThrough',false); this.classList.add('active')" class="active">interactThrough: false</button>
+            <div class="radio-group">
+                <b>control:</b>
+                <label><input type="radio" name="control" checked="checked">true</label>
+                <label><input type="radio" name="control">false</label>
             </div>
-            <div class="buttons-group">
-                <button name="spacer" onclick="updateTrueStory('spacer','10px'); this.classList.add('active')">spacer: 10px</button>
-                <button name="spacer" onclick="updateTrueStory('spacer','20em'); this.classList.add('active')" class="active">spacer: 20em</button>
-                <button name="spacer" onclick="updateTrueStory('spacer','50%'); this.classList.add('active')">spacer: 50%</button>
+            <div class="radio-group">
+                <b>collapsed:</b>
+                <label><input type="radio" name="collapsed">true</label>
+                <label><input type="radio" name="collapsed" checked="checked">false</label>
             </div>
-            <div class="buttons-group">
-                <button name="position" onclick="updateTrueStory('position','topleft'); this.classList.add('active')" class="active">position: topleft</button>
-                <button name="position" onclick="updateTrueStory('position','topright'); this.classList.add('active')">position: topright</button>
-                <button name="position" onclick="updateTrueStory('position','bottomleft'); this.classList.add('active')">position: bottomleft</button>
-                <button name="position" onclick="updateTrueStory('position','bottomright'); this.classList.add('active')">position: bottomright</button>
+            <div class="radio-group">
+                <b>autoshift:</b>
+                <label><input type="radio" name="autoshift" checked="checked">true</label>
+                <label><input type="radio" name="autoshift">false</label>
             </div>
-            <div class="buttons-group">
-                <button name="collapsed" onclick="updateTrueStory('collapsed',true); this.classList.add('active')">collapsed: true</button>
-                <button name="collapsed" onclick="updateTrueStory('collapsed',false); this.classList.add('active')" class="active">collapsed: false</button>
+            <div class="radio-group">
+                <b>blured:</b>
+                <label><input type="radio" name="blured">true</label>
+                <label><input type="radio" name="blured" checked="checked">false</label>
             </div>
-            <div class="buttons-group">
-                <button name="control" onclick="updateTrueStory('control',true); this.classList.add('active')" class="active">control: true</button>
-                <button name="control" onclick="updateTrueStory('control',false); this.classList.add('active')">control: false</button>
+            <div class="radio-group">
+                <b>interactThrough:</b>
+                <label><input type="radio" name="interactThrough">true</label>
+                <label><input type="radio" name="interactThrough" checked="checked">false</label>
             </div>
         </div>
     </div>

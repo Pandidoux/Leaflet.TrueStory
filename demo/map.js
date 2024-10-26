@@ -36,7 +36,7 @@ const printStory = function(story) {
 // Define the Leaflet.LayerOpacity control
 let leafletTrueStory = L.leafletTrueStory({
     id: 'my-truestory',
-    mode: 'right',
+    mode: 'full',
     autoshift: true,
     background: 'rgba(0, 0, 0, 0.3)',
     interactThrough: false,
@@ -105,7 +105,7 @@ console.log('leafletTrueStory =', leafletTrueStory);
  * @param {string} property Property name
  * @param {any} value Value to assign
  */
-const updateTrueStory = function(property,value) {
+const updateTrueStory = function (property, value) {
     leafletTrueStory.remove();
     leafletTrueStory.options[property] = value;
     leafletTrueStory.addTo(map);
@@ -113,3 +113,11 @@ const updateTrueStory = function(property,value) {
         button.classList.remove('active');
     });
 }
+document.querySelectorAll('.radio-group label').forEach(label => {
+    const input = label.querySelector('input');
+    input.addEventListener('change', (e) => {
+        const name = input.getAttribute('name');
+        const value = (['true', 'false'].includes(label.innerText)) ? label.innerText == 'true' : label.innerText;
+        updateTrueStory(name, value);
+    });
+});
