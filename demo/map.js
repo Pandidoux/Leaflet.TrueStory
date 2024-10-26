@@ -47,6 +47,7 @@ let leafletTrueStory = L.leafletTrueStory({
     spacer: '30em',
     borderRadius: '25px',
     blured: false,
+    padding: '20px 60px',
     stories: [
         {
             id: 'story-1',

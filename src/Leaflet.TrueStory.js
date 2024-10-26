@@ -3,6 +3,7 @@ L.LeafletTrueStory = L.Control.extend({
     options: {
         id: null, // Storymap container HTML id
         mode: 'full', // Story display mode: "full"|"left"|"right"
+        padding: '10px', // CSS padding property between the stories and the edges of the map
         background: 'transparent', // Background css property of the stories container
         interactThrough: false, // Allow interactions with the map through the storymap background
         toggle: false, // Show a control toggle button
@@ -83,6 +84,7 @@ L.LeafletTrueStory = L.Control.extend({
             L.DomEvent.disableScrollPropagation(this._storyContainer);
         }
         this._storyContainer.style.boxShadow = (this.options.blured === true) ? `0 0 5px 5px ${this.options.background}` : null;
+        this._storyContainer.style.padding = this.options.padding;
 
         // Stories
         if (Object.prototype.toString.call(this.options.stories) === '[object Array]') {
