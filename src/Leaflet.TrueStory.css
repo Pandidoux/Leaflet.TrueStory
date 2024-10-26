@@ -38,6 +38,8 @@
     left: 0;
     height: 100%;
     width: 100%;
+    width: -webkit-fill-available;
+    width: -moz-available;
 }
 
 .leaflet-truestory-modeleft {
@@ -57,11 +59,16 @@
     height: 100%;
 }
 
-@media (max-width:641px) {
-    .leaflet-truestory-moderight, .leaflet-truestory-modeleft {
-        left: 0;
-        width: initial;
-        height: calc(100% / 2.5);
-        top: calc(100% - (100% / 2.5));
-    }
+.leaflet-truestory-modetop {
+    left: 0;
+    width: initial;
+    height: calc(100% / 2.5);
+    top: 0;
+}
+
+.leaflet-truestory-modebottom {
+    left: 0;
+    width: initial;
+    height: calc(100% / 2.5);
+    top: calc(100% - (100% / 2.5));
 }

@@ -37,6 +37,7 @@ const printStory = function(story) {
 let leafletTrueStory = L.leafletTrueStory({
     id: 'my-truestory',
     mode: 'full',
+    miniMode: 'bottom',
     autoshift: true,
     background: 'rgba(0, 0, 0, 0.3)',
     interactThrough: false,

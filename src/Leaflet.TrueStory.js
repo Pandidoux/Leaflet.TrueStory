@@ -2,7 +2,8 @@
 L.LeafletTrueStory = L.Control.extend({
     options: {
         id: null, // Storymap container HTML id
-        mode: 'full', // Story display mode: "full"|"left"|"right"
+        mode: 'full', // Story display mode: "full"|"left"|"right"|"top"|"bottom"
+        miniMode: 'bottom', // Display mode on mobile: "full"|"left"|"right"|"top"|"bottom"
         padding: '10px', // CSS padding property between the stories and the edges of the map
         background: 'transparent', // Background css property of the stories container
         interactThrough: false, // Allow interactions with the map through the storymap background
@@ -10,7 +11,7 @@ L.LeafletTrueStory = L.Control.extend({
         controlLabel: 'Toggle storymap', // Label of the storymap control button
         position: 'topleft', // Control button position
         collapsed: false, // Should storymap be collapsed on init (when control: true)
-        spacer: '200px', // Bottom padding space between each stories
+        spacer: '200px', // Padding bottom space between each stories
         autoshift: true, // Automaticaly shift the map to the side when mode is right or left
         borderRadius: '20px', // Border radius of stories blocs
         blured: false, // Blur the limits between the map and the storymap background
@@ -46,7 +47,6 @@ L.LeafletTrueStory = L.Control.extend({
 
     /** Create control UI */
     _initLayout: function () {
-
         // Toggle open button
         this._container = L.DomUtil.create('div', 'leaflet-bar leaflet-truestory-openner');
         this._oppener = document.createElement('a');
@@ -66,17 +66,7 @@ L.LeafletTrueStory = L.Control.extend({
             this._storyContainer.setAttribute('id', this.options.id);
         }
         this._storyContainer.classList.add('leaflet-truestory');
-        switch (this.options.mode) {
-            case 'left':
-                this._storyContainer.classList.add('leaflet-truestory-modeleft');
-                break;
-            case 'right':
-                this._storyContainer.classList.add('leaflet-truestory-moderight');
-                break;
-            default:
-                this._storyContainer.classList.add('leaflet-truestory-modecenter');
-                break;
-        }
+        this._setClassList();
         this._storyContainer.style.background = this.options.background;
         // Disable map interaction through all storymap surface
         if (this.options.interactThrough !== true) {
@@ -202,11 +192,65 @@ L.LeafletTrueStory = L.Control.extend({
         }, {
             passive: true
         });
+
+        if (['left','right','top','bottom'].includes(this.options.mode)) { // not center
+            this._map.on('resize', (e) => {
+                if (e.oldSize.x <= 640 && e.newSize.x > 640 || e.oldSize.x > 640 && e.newSize.x <= 640) { // size increase or decrease
+                    this._setClassList();
+                }
+            });
+        }
+
         // init first story callback
         if (typeof this.options.stories[0].callback == 'function') {
             this.options.stories[0].callback(this.options.stories[0]);
         }
 
+    },
+
+
+    /** Set storymap's container class list */
+    _setClassList: function() {
+        // console.log('_setClassList');
+        const mapSize = this._map.getSize();
+        this._storyContainer.classList.remove('leaflet-truestory-modeleft','leaflet-truestory-moderight','leaflet-truestory-modetop','leaflet-truestory-modebottom','leaflet-truestory-modecenter');
+        if (mapSize.x > 640) { // normal width
+            switch (this.options.mode) {
+                case 'left':
+                    this._storyContainer.classList.add('leaflet-truestory-modeleft');
+                    break;
+                case 'right':
+                    this._storyContainer.classList.add('leaflet-truestory-moderight');
+                    break;
+                case 'top':
+                    this._storyContainer.classList.add('leaflet-truestory-modetop');
+                    break;
+                case 'bottom':
+                    this._storyContainer.classList.add('leaflet-truestory-modebottom');
+                    break;
+                default:
+                    this._storyContainer.classList.add('leaflet-truestory-modecenter');
+                    break;
+            }
+        } else { // small width
+            switch (this.options.miniMode) {
+                case 'left':
+                    this._storyContainer.classList.add('leaflet-truestory-modeleft');
+                    break;
+                case 'right':
+                    this._storyContainer.classList.add('leaflet-truestory-moderight');
+                    break;
+                case 'top':
+                    this._storyContainer.classList.add('leaflet-truestory-modetop');
+                    break;
+                case 'bottom':
+                    this._storyContainer.classList.add('leaflet-truestory-modebottom');
+                    break;
+                default:
+                    this._storyContainer.classList.add('leaflet-truestory-modecenter');
+                    break;
+            }
+        }
     },
 
 
@@ -278,9 +322,9 @@ L.LeafletTrueStory = L.Control.extend({
             default:
                 break;
         }
-        let offset_h = (map.getSize().x * shiftPercent) * multiplier_h;
-        let offset_v = (map.getSize().y * shiftPercent) * multiplier_v;
-        map.panBy(new L.Point(offset_h, offset_v), { animate: false }); // Shift map center
+        let offset_h = (this._map.getSize().x * shiftPercent) * multiplier_h;
+        let offset_v = (this._map.getSize().y * shiftPercent) * multiplier_v;
+        this._map.panBy(new L.Point(offset_h, offset_v), { animate: false }); // Shift map center
     },
 
 
@@ -308,9 +352,9 @@ L.LeafletTrueStory = L.Control.extend({
             default:
                 break;
         }
-        let offset_h = (map.getSize().x * shiftPercent) * multiplier_h;
-        let offset_v = (map.getSize().y * shiftPercent) * multiplier_v;
-        map.panBy(new L.Point(offset_h, offset_v), { animate: false }); // Shift map center
+        let offset_h = (this._map.getSize().x * shiftPercent) * multiplier_h;
+        let offset_v = (this._map.getSize().y * shiftPercent) * multiplier_v;
+        this._map.panBy(new L.Point(offset_h, offset_v), { animate: false }); // Shift map center
     },
 
 
