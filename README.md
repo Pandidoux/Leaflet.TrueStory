@@ -34,36 +34,34 @@ Add the Leaflet.TrueStory control:
 ```javascript
 // Define the Leaflet.TrueStory control
 let leafletTrueStory = L.leafletTrueStory({
-    options: {
-        id: 'my-truestory',
-        mode: 'full',
-        background: 'rgba(0, 0, 0, 0.4)',
-        interactThrough: false,
-        control: true,
-        controlLabel: 'Toggle storymap',
-        position: 'topleft',
-        collapsed: false,
-        spacer: '20em',
-        autoshift: true,
-        stories: [
-            {
-                id: null,
-                title: null,
-                content: null,
-                width: '100%',
-                align: 'center',
-                callback: null,
-            },{
-                title: null,
-                content: null,
-                width: '100%',
-                align: 'center',
-                callback: function(story) {
-                    console.log("Story is visible =>",story);
-                },
-            }
-        ],
-    },
+    id: 'my-truestory',
+    mode: 'full',
+    background: 'rgba(0, 0, 0, 0.4)',
+    interactThrough: false,
+    control: true,
+    controlLabel: 'Toggle storymap',
+    position: 'topleft',
+    collapsed: false,
+    spacer: '20em',
+    autoshift: true,
+    stories: [
+        {
+            id: null,
+            title: null,
+            content: null,
+            width: '100%',
+            align: 'center',
+            callback: null,
+        },{
+            title: null,
+            content: null,
+            width: '100%',
+            align: 'center',
+            callback: function(story) {
+                console.log("Story is visible =>",story);
+            },
+        }
+    ],
 });
 // Add control to map
 leafletTrueStory.addTo(map);
